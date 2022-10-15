@@ -2,6 +2,7 @@ package com.vhenri.stock_list_app
 
 import android.app.Application
 import com.vhenri.stock_list_app.di.AppComponent
+import com.vhenri.stock_list_app.di.DaggerAppComponent
 
 open class StockListApplication : Application() {
     // Instance of the AppComponent that will be used by all the Activities in the project
@@ -10,7 +11,6 @@ open class StockListApplication : Application() {
     }
 
     open fun initComponent(): AppComponent {
-        TODO()
-//        return DaggerAppComponent.factory().create(applicationContext)
+        return DaggerAppComponent.factory().create(applicationContext)
     }
 }
