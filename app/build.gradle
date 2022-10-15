@@ -1,16 +1,18 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
 }
 
 android {
     namespace 'com.vhenri.stock_list_app'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.vhenri.stock_list_app"
         minSdk 29
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -33,14 +35,30 @@ android {
 }
 
 dependencies {
+    def dagger_version = "2.44"
+    def androidx_test_version = "1.4.0"
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation "androidx.appcompat:appcompat:1.4.1"
+    implementation "androidx.core:core-ktx:1.7.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+
     implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1' // TODO - remove eventually
+
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    
+    testImplementation 'org.mockito:mockito-core:3.4.6'
+    testImplementation 'android.arch.core:core-testing:1.1.1'
+
+    // Likely won't use these for this project, but adding in case I want to get fancy later
+    androidTestImplementation "androidx.test:runner:$androidx_test_version"
+    androidTestImplementation "androidx.test:core-ktx:$androidx_test_version"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
 }

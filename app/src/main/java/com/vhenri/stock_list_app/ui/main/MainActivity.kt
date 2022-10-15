@@ -1,8 +1,8 @@
-package com.vhenri.stock_list_app
+package com.vhenri.stock_list_app.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.vhenri.stock_list_app.ui.main.MainFragment
+import com.vhenri.stock_list_app.R
 
 class MainActivity : AppCompatActivity() {
 
