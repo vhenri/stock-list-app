@@ -40,7 +40,4 @@ object NetworkModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
-
-    @Provides
-    fun providesStocksApi(retrofit: Retrofit): StocksApi = retrofit.create()
 }

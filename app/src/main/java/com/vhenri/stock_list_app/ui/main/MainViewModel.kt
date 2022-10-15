@@ -33,4 +33,8 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
             )
         }
     }
+
+    fun testVmWorking(): String {
+        return "VM is connected!"
+    }
 }
