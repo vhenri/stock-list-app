@@ -20,14 +20,16 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
     val errorState = _errorState.asStateFlow()
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val loading = _isLoading.asStateFlow()
+    val isLoading = _isLoading.asStateFlow()
 
     fun getStocksData(apiType: ApiType){
+        _isLoading.update { true }
         viewModelScope.launch {
             stockDataRepository.getStockList(apiType).mapEither(
                 success = { stockList ->
                     val stocks = stockList?.stocks ?: emptyList()
                     _stockList.update { stocks }
+                    _errorState.update { null }
                 },
                 failure = {
                     val error = "Oh no, something went wrong! Unable to fetch stock data :("
@@ -35,6 +37,7 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
                     _errorState.update { error }
                 }
             )
+            _isLoading.update { false }
         }
     }
 }

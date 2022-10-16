@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -40,6 +41,7 @@ class MainFragment : Fragment() {
         binding.stocksRv.adapter = adapter
         viewModel.getStocksData(ApiType.PORTFOLIO)
         initObservables()
+        initBindings()
     }
 
     private fun initObservables(){
@@ -50,7 +52,32 @@ class MainFragment : Fragment() {
                         adapter.list = list
                     }
                 }
+                launch(){
+                    viewModel.isLoading.collect{
+                        binding.loading.isVisible = it
+                    }
+                }
+                launch(){
+                    viewModel.errorState.collect{
+                        val showError = (it != null)
+                        binding.stocksRv.isVisible = !showError
+                        binding.errorText.isVisible = showError
+                        binding.errorText.text = it
+                    }
+                }
             }
+        }
+    }
+
+    private fun initBindings(){
+        binding.buttonGood.setOnClickListener{
+            viewModel.getStocksData(ApiType.PORTFOLIO)
+        }
+        binding.buttonMalformed.setOnClickListener {
+            viewModel.getStocksData(ApiType.MALFORMED)
+        }
+        binding.buttonEmpty.setOnClickListener {
+            viewModel.getStocksData(ApiType.EMPTY)
         }
     }
 
