@@ -1,6 +1,5 @@
 package com.vhenri.stock_list_app.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.mapEither
@@ -26,9 +25,9 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
     fun getStocksData(apiType: ApiType){
         viewModelScope.launch {
             stockDataRepository.getStockList(apiType).mapEither(
-                success = {
-                    Log.d("###", it?.stocks.toString())
-                    _stockList.update{it}
+                success = { stockList ->
+                    val stocks = stockList?.stocks ?: emptyList()
+                    _stockList.update { stocks }
                 },
                 failure = {
                     val error = "Oh no, something went wrong! Unable to fetch stock data :("

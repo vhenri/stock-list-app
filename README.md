@@ -30,6 +30,7 @@ TODO
 - Dagger (Dependency Injection)
 - kotlin-result (Monads ♥️)
 - Referenced Google's "[Using Dagger in your Android app](https://github.com/googlecodelabs/android-dagger)" CodeLab for a refresher on using Dagger.
+- Referenced Google [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
 ## Other information / Thoughts
 At my day job, I work on a rather large application with multiple modules, a robust networking layer and lots of helpful classes. Building this app out has reminded me that I'm spoiled and it's good to revisit the basics once in a while :)
@@ -40,9 +41,7 @@ Anyways, the dependencies in this app are what I feel is the some-what minimum n
 - Timber (better logging)
 - Coil (pretty images)
 
-## TODO 
-[ ] - Switch from R. to viewbindings 
-[ ] - Add Recyclerview
+## TODO
 [ ] - Add loading state / error state / empty state
 [ ] - Add a button to switch api endpoints (to demonstrate above states)
 [ ] - Add Unit tests
