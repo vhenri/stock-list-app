@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.vhenri.stock_list_app.R
+import com.vhenri.stock_list_app.repo.ApiType
 import javax.inject.Inject
 
 class MainFragment : Fragment() {
@@ -22,7 +23,7 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("###", viewModel.testVmWorking())
+        viewModel.getStocksData(ApiType.PORTFOLIO)
     }
 
     override fun onCreateView(

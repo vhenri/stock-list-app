@@ -4,6 +4,11 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
+data class StockList(
+    val stocks: List<Stock>
+)
+
+@JsonClass(generateAdapter = true)
 data class Stock(
     val ticker: String,
     val name: String,

@@ -1,31 +1,37 @@
 package com.vhenri.stock_list_app.di
 
-import android.content.Context
 import com.squareup.moshi.Moshi
-import com.vhenri.stock_list_app.network.StocksApi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
-object NetworkModule {
-    private const val BASE_URL = "https://storage.googleapis.com/cash-homework/cash-stocks-api/"
+class NetworkModule {
+    companion object {
+        const val BASE_URL = "https://storage.googleapis.com/cash-homework/cash-stocks-api/"
+    }
 
     @Provides
     fun providesMoshi(): Moshi {
-        // If we needed to, we can also add adapters to these before .build()!
-        return Moshi.Builder().build()
+        return Moshi.Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
     }
 
     @Provides
     @Singleton
-    internal fun provideOkHttpClient(context: Context): OkHttpClient {
-        // If we needed to, we can also add adapters to these before .build()!
-        return OkHttpClient.Builder().build()
+    internal fun provideOkHttpClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor().apply {
+            setLevel(HttpLoggingInterceptor.Level.BODY)
+        }
+        return OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .build()
     }
 
     @Provides

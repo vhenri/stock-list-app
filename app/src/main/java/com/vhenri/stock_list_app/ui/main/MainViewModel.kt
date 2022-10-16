@@ -1,10 +1,11 @@
 package com.vhenri.stock_list_app.ui.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.mapEither
 import com.vhenri.stock_list_app.models.Stock
-import com.vhenri.stock_list_app.network.ApiType
+import com.vhenri.stock_list_app.repo.ApiType
 import com.vhenri.stock_list_app.repo.StockDataRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,10 +20,14 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
     private val _errorState: MutableStateFlow<String?> = MutableStateFlow(null)
     val errorState = _errorState.asStateFlow()
 
+    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val loading = _isLoading.asStateFlow()
+
     fun getStocksData(apiType: ApiType){
         viewModelScope.launch {
             stockDataRepository.getStockList(apiType).mapEither(
                 success = {
+                    Log.d("###", it?.stocks.toString())
                     _stockList.update{it}
                 },
                 failure = {
@@ -32,9 +37,5 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
                 }
             )
         }
-    }
-
-    fun testVmWorking(): String {
-        return "VM is connected!"
     }
 }
