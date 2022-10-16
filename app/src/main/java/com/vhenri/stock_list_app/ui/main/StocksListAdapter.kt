@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.vhenri.stock_list_app.databinding.StockCellBinding
+import com.vhenri.stock_list_app.helpers.convertCentsToDollarString
 import com.vhenri.stock_list_app.models.Stock
 
 class StocksListAdapter : RecyclerView.Adapter<StockCellVH>() {
@@ -29,7 +30,7 @@ class StocksListAdapter : RecyclerView.Adapter<StockCellVH>() {
 class StockCellVH(private val binding: StockCellBinding) : ViewHolder(binding.root) {
     fun bind(stock: Stock) {
         binding.tickerName.text = "${stock.ticker} - ${stock.name}"
-        binding.currencyPrice.text = "${stock.currency} - ${stock.currentPriceCents}"
+        binding.currencyPrice.text = "${stock.currentPriceCents.convertCentsToDollarString()} (${stock.currency})"
         if (stock.quantity != null){
             binding.quantity.isVisible = true
             binding.quantity.text = "Quantity - ${stock.quantity}"
