@@ -1,9 +1,13 @@
 package com.vhenri.stock_list_app.ui.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.mapEither
 import com.vhenri.stock_list_app.models.Stock
+import com.vhenri.stock_list_app.models.StockApiException
+import com.vhenri.stock_list_app.models.StockMalformedJsonException
+import com.vhenri.stock_list_app.models.getUserExceptionMsg
 import com.vhenri.stock_list_app.repo.ApiType
 import com.vhenri.stock_list_app.repo.StockDataRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,8 +36,7 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
                     _errorState.update { null }
                 },
                 failure = {
-                    val error = "Oh no, something went wrong! Unable to fetch stock data :("
-                    // TODO - Log error, show toast
+                    val error = "Oh no, something went wrong! Unable to fetch stock data. ${it.getUserExceptionMsg()}"
                     _errorState.update { error }
                 }
             )
