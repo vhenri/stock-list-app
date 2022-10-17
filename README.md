@@ -31,6 +31,7 @@ TODO
 - kotlin-result (Monads ♥️)
 - Referenced Google's "[Using Dagger in your Android app](https://github.com/googlecodelabs/android-dagger)" CodeLab for a refresher on using Dagger.
 - Referenced Google [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- Borrowed `CoroutineTestRule.kt` & `ViewModelTestRule.kt` from a few past projects, which were probably borrowed from StackOverflow 😅
 
 ## Other information / Thoughts
 At my day job, I work on a rather large application with multiple modules, a robust networking layer and lots of helpful classes. Building this app out has reminded me that I'm spoiled and it's good to revisit the basics once in a while :)

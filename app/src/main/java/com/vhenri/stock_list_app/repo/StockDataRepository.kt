@@ -6,8 +6,12 @@ import com.vhenri.stock_list_app.models.StockList
 import com.vhenri.stock_list_app.network.StocksApiClient
 import javax.inject.Inject
 
-class StockDataRepository @Inject constructor(private val stocksApiClient: StocksApiClient){
-    suspend fun getStockList(apiType: ApiType): Result<StockList?, StockApiException> {
+interface StockDataRepositoryInterface {
+    suspend fun getStockList(apiType: ApiType): Result<StockList?, StockApiException>
+}
+
+class StockDataRepository @Inject constructor(private val stocksApiClient: StocksApiClient): StockDataRepositoryInterface {
+    override suspend fun getStockList(apiType: ApiType): Result<StockList?, StockApiException> {
         return when (apiType) {
             ApiType.PORTFOLIO -> {
                 stocksApiClient.getStocks()
@@ -22,4 +26,4 @@ class StockDataRepository @Inject constructor(private val stocksApiClient: Stock
     }
 }
 
-enum class ApiType { PORTFOLIO, MALFORMED, EMPTY}
+enum class ApiType { PORTFOLIO, MALFORMED, EMPTY }
