@@ -10,7 +10,9 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.vhenri.stock_list_app.R
 import com.vhenri.stock_list_app.databinding.FragmentMainBinding
+import com.vhenri.stock_list_app.models.Stock
 import com.vhenri.stock_list_app.repo.ApiType
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,21 +50,17 @@ class MainFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 launch() {
-                    viewModel.stockList.collect{ list ->
-                        adapter.list = list
+                    viewModel.uiState.collect { state ->
+                        if (!state.stockList.isNullOrEmpty()) {
+                            updateList(state.stockList)
+                        } else if (!state.errorString.isNullOrEmpty()){
+                            updateNoListData(state.errorType, state.errorString)
+                        }
                     }
                 }
                 launch(){
                     viewModel.isLoading.collect{
                         binding.loading.isVisible = it
-                    }
-                }
-                launch(){
-                    viewModel.errorState.collect{
-                        val showError = (it != null)
-                        binding.stocksRv.isVisible = !showError
-                        binding.errorText.isVisible = showError
-                        binding.errorText.text = it
                     }
                 }
             }
@@ -79,6 +77,20 @@ class MainFragment : Fragment() {
         binding.buttonEmpty.setOnClickListener {
             viewModel.getStocksData(ApiType.EMPTY)
         }
+    }
+
+    private fun updateList(list: List<Stock>){
+        binding.stocksRv.isVisible = true
+        binding.noListView.isVisible = false
+        adapter.list = list
+    }
+
+    private fun updateNoListData(errorType: UiErrorType?, message: String?) {
+        val drawable = if (errorType == UiErrorType.EMPTY_LIST) R.drawable.img_no_list else R.drawable.img_error
+        binding.stocksRv.isVisible = false
+        binding.noListView.isVisible = true
+        binding.noListText.text = message
+        binding.noListImg.setImageResource(drawable)
     }
 
 }

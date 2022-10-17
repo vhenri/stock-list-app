@@ -58,19 +58,50 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:scrollbars="vertical"
+        tools:visibility="visible"
         tools:listitem="@layout/stock_cell"
         tools:itemCount="4"/>
 
-    <TextView
-        android:id="@+id/error_text"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/no_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_good"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="ERROR"
-        android:visibility="gone"
-        />
+        android:visibility="gone">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/no_list_img"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginVertical="20dp"
+                android:src="@drawable/img_error"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/no_list_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="22dp"
+                android:layout_marginHorizontal="20dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/no_list_img"
+                android:gravity="center_horizontal"
+                tools:text="Uhoh! Looks like you don't have any stocks data :( "
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

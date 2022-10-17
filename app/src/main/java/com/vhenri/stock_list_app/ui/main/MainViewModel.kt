@@ -1,12 +1,9 @@
 package com.vhenri.stock_list_app.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.mapEither
 import com.vhenri.stock_list_app.models.Stock
-import com.vhenri.stock_list_app.models.StockApiException
-import com.vhenri.stock_list_app.models.StockMalformedJsonException
 import com.vhenri.stock_list_app.models.getUserExceptionMsg
 import com.vhenri.stock_list_app.repo.ApiType
 import com.vhenri.stock_list_app.repo.StockDataRepository
@@ -17,11 +14,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val stockDataRepository: StockDataRepository) : ViewModel() {
-    private val _stockList: MutableStateFlow<List<Stock>> = MutableStateFlow(emptyList())
-    val stockList = _stockList.asStateFlow()
+    private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(null, null,null))
+    val uiState = _uiState.asStateFlow()
 
-    private val _errorState: MutableStateFlow<String?> = MutableStateFlow(null)
-    val errorState = _errorState.asStateFlow()
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
@@ -31,16 +26,47 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
         viewModelScope.launch {
             stockDataRepository.getStockList(apiType).mapEither(
                 success = { stockList ->
-                    val stocks = stockList?.stocks ?: emptyList()
-                    _stockList.update { stocks }
-                    _errorState.update { null }
+                    val stocks = stockList?.stocks
+                    if (stocks?.isNotEmpty() == true) {
+                        _uiState.update {
+                            MainUiState(
+                                stocks,
+                                null,
+                                null
+                            )
+                        }
+                    } else {
+                        _uiState.update {
+                            MainUiState(
+                                null,
+                                UiErrorType.EMPTY_LIST,
+                                "🫙 Uh oh, the Stock List is empty!"
+                            )
+                        }
+                    }
                 },
                 failure = {
-                    val error = "Oh no, something went wrong! Unable to fetch stock data. ${it.getUserExceptionMsg()}"
-                    _errorState.update { error }
+                    val error = "🚨 Oh no, something went wrong! Unable to fetch stock data. \n\n${it.getUserExceptionMsg()}"
+                    _uiState.update {
+                        MainUiState(
+                            null,
+                            UiErrorType.DATA_ERROR,
+                            error
+                        )
+                    }
                 }
             )
             _isLoading.update { false }
         }
     }
+}
+
+data class MainUiState(
+    val stockList: List<Stock>?,
+    val errorType: UiErrorType?,
+    val errorString: String?
+)
+
+enum class UiErrorType {
+    EMPTY_LIST, DATA_ERROR
 }
