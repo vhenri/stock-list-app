@@ -6,6 +6,7 @@ import com.vhenri.stock_list_app.repo.ApiType.MALFORMED
 import com.vhenri.stock_list_app.repo.ApiType.EMPTY
 import com.vhenri.stock_list_app.repo.StockDataRepository
 import com.vhenri.stock_list_app.ui.main.MainViewModel
+import com.vhenri.stock_list_app.ui.main.UiErrorType
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -41,32 +42,41 @@ class MainViewModelTest {
 
     @Test
     fun `get stocks data happy path`() = runTest {
-       viewModel.stockList.test{
+       viewModel.uiState.test{
            viewModel.getStocksData(PORTFOLIO)
            awaitItem() // skip init of empty
-           assertEquals(stockListResponseGood().value.stocks, awaitItem())
+           val uiState = awaitItem()
+           assertEquals(stockListResponseGood().value.stocks, uiState.stockList)
+           assertNull(uiState.errorType)
+           assertNull(uiState.errorString)
            cancelAndConsumeRemainingEvents()
        }
     }
 
     @Test
-    fun `when stockList is not empty, if empty api is requested, list should be empty`() = runTest {
-        viewModel.stockList.test{
+    fun `when stockList is not empty, if empty api is requested, list should be null, errorTyoe should be EMPTY_LIST and errorString should be not null`() = runTest {
+        viewModel.uiState.test{
             viewModel.getStocksData(PORTFOLIO)
             viewModel.getStocksData(EMPTY)
             awaitItem() // vm init
             awaitItem() // happy path
-            assertEquals(stockListResponseEmpty().value.stocks, awaitItem())
+            val uiState = awaitItem()
+            assertNull(uiState.stockList)
+            assertEquals(UiErrorType.EMPTY_LIST, uiState.errorType)
+            assertNotNull(uiState.errorString)
             cancelAndConsumeRemainingEvents()
         }
     }
 
     @Test
-    fun `when malformed api is requested, errorState should not be empty`() = runTest {
-        viewModel.errorState.test{
+    fun `when malformed api is requested, list should be null, errorTyoe should be DATA_ERROR and errorString should be not null`() = runTest {
+        viewModel.uiState.test{
             viewModel.getStocksData(MALFORMED)
             awaitItem() // vm init
-            assertNotEquals(awaitItem(), null)
+            val uiState = awaitItem()
+            assertNull(uiState.stockList)
+            assertEquals(UiErrorType.DATA_ERROR, uiState.errorType)
+            assertNotNull(uiState.errorString)
             cancelAndConsumeRemainingEvents()
         }
     }
