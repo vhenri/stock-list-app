@@ -65,6 +65,8 @@ Again due to the size and low complexity of this app, mocks were used over stubs
 - Moshi
 - Dagger
 - kotlin-result (Monads ♥️)
+- Coroutines
+
 - Referenced Google's [Using Dagger in your Android app](https://github.com/googlecodelabs/android-dagger) CodeLab for a refresher on using Dagger.
 - Referenced Google [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - Borrowed `CoroutineTestRule.kt`,`ViewModelTestRule.kt` & BaseApiClient's `execute` from a few past projects ... which were probably borrowed from StackOverflow 😅
