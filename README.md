@@ -9,7 +9,7 @@ To do this, the app leverages the following libraries:
 - Dagger
 - kotlin-result (Monads ♥️)
 
-## Requirements
+## Functionality Requirements
 App Needs to:
 - Handle loading, error, and empty states
 - Display the returned information in a list (feel free to add whatever UI touches you'd like)
