@@ -34,7 +34,7 @@ The app uses state flows to notify Fragment listeners of updates from the ViewMo
 Screens have 2 state flows: uiState and isLoading. UiState contains all the data required for the screen's main functionality (list of stocks, error data) and isLoading is a UI "side effect" that doesn't impact the overall application state.
 
 ### Networking 
-Retrofit + OkHttp is used to grab data from the APIs, and Moshi parses the data for us. API responses are converted into a **result monad** at the ApiClient layer (using kotln-result). This is done to allow us to easily handle errors only when we actually need the data value. In this app, that's the ViewModel. The app does also have custom exceptions (see `StockApiException`) to provide more granularity around errors, and can be extended as needed.
+Retrofit + OkHttp is used to grab data from the APIs, and Moshi parses the data for us. API responses are converted into a **result monad** at the ApiClient layer (using kotlin-result). This is done to allow us to easily handle errors only when we actually need the data value. In this app, that's the ViewModel. The app does also have custom exceptions (see `StockApiException`) to provide more granularity around errors, and can be extended as needed.
 
 ### Dependency Injection
 Dependency Injection is done with just *vanilla* Dagger. While Moshi does do annotation processing on top of Google's KSP, KAPT is still required for dagger. Since this is a pretty small and un-complicated app, it works just fine for this use-case. To extend / grow this app, Anvil would be a great option to consider adding as it would improve build times and probably cause less cashing-related headaches since KAPT wouldn't be required.
@@ -66,6 +66,11 @@ Again due to the size and low complexity of this app, mocks were used over stubs
 - Dagger
 - kotlin-result (Monads ♥️)
 - Coroutines
+
+- Junit
+- Mockk 
+- kotlinx-coroutines-test
+- CashApp Turbine (super helpful for those state flows!)
 
 - Referenced Google's [Using Dagger in your Android app](https://github.com/googlecodelabs/android-dagger) CodeLab for a refresher on using Dagger.
 - Referenced Google [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
