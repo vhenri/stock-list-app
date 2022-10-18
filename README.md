@@ -81,3 +81,9 @@ Anyways, the dependencies in this app are what I feel is the some-what minimum n
 - Timber (better logging)
 - Linting (good developer hygiene)
 
+## Demo
+
+https://user-images.githubusercontent.com/12767035/196528924-a0979f1c-3406-4b88-aaf6-1e81d5483e46.mov
+
+
+
