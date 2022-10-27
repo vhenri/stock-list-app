@@ -9,5 +9,15 @@
         android:id="@+id/mainFragment"
         android:name="com.vhenri.stock_list_app.ui.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/mainFragment_to_stockDetailsFragment"
+            app:destination="@id/stockDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stockDetailsFragment"
+        android:name="com.vhenri.stock_list_app.ui.main.stocks.StockDetailsFragment"
+        android:label="fragment_stock_details"
+        tools:layout="@layout/fragment_stock_detail"
+        />
 </navigation>

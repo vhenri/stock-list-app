@@ -10,10 +10,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.vhenri.stock_list_app.R
 import com.vhenri.stock_list_app.databinding.FragmentMainBinding
 import com.vhenri.stock_list_app.models.Stock
 import com.vhenri.stock_list_app.repo.ApiType
+import com.vhenri.stock_list_app.ui.main.stocks.StocksListAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +24,7 @@ class MainFragment : Fragment() {
     lateinit var binding: FragmentMainBinding
     @Inject
     lateinit var viewModel: MainViewModel
-    private val adapter = StocksListAdapter()
+    private val adapter = StocksListAdapter{viewModel.onStockCellClicked(it)}
 
     override fun onAttach(context: Context) {
         viewModel = (requireActivity() as MainActivity).viewModel
@@ -61,6 +63,13 @@ class MainFragment : Fragment() {
                 launch(){
                     viewModel.isLoading.collect{
                         binding.loading.isVisible = it
+                    }
+                }
+                launch(){
+                    viewModel.navigation.collect {
+                        if (it != null) {
+                            findNavController().navigate(it)
+                        }
                     }
                 }
             }
