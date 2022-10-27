@@ -1,4 +1,4 @@
-package com.vhenri.stock_list_app.ui.main
+package com.vhenri.stock_list_app.ui.main.stocks
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,9 @@ import com.vhenri.stock_list_app.databinding.StockCellBinding
 import com.vhenri.stock_list_app.helpers.convertCentsToDollarString
 import com.vhenri.stock_list_app.models.Stock
 
-class StocksListAdapter : RecyclerView.Adapter<StockCellVH>() {
+class StocksListAdapter(
+    private val onClick: (Stock) -> Unit
+) : RecyclerView.Adapter<StockCellVH>() {
     var list: List<Stock> = emptyList()
         set(value) {
             field = value
@@ -24,11 +26,12 @@ class StocksListAdapter : RecyclerView.Adapter<StockCellVH>() {
 
     override fun getItemCount(): Int = list.size
 
-    override fun onBindViewHolder(holder: StockCellVH, position: Int) = holder.bind(list[position])
+    override fun onBindViewHolder(holder: StockCellVH, position: Int) = holder.bind(list[position], onClick)
 }
 
 class StockCellVH(private val binding: StockCellBinding) : ViewHolder(binding.root) {
-    fun bind(stock: Stock) {
+    fun bind(stock: Stock, onClick: (Stock)-> Unit) {
+        binding.root.setOnClickListener { onClick(stock) }
         binding.tickerName.text = "${stock.ticker} - ${stock.name}"
         binding.currencyPrice.text = "${stock.currentPriceCents.convertCentsToDollarString()} (${stock.currency})"
         if (stock.quantity != null){

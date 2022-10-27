@@ -2,6 +2,7 @@ package com.vhenri.stock_list_app.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
 import com.github.michaelbull.result.mapEither
 import com.vhenri.stock_list_app.models.Stock
 import com.vhenri.stock_list_app.models.getUserExceptionMsg
@@ -17,9 +18,13 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
     private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(null, null,null))
     val uiState = _uiState.asStateFlow()
 
-
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
+
+    private val _navigation: MutableStateFlow<NavDirections?> = MutableStateFlow(null)
+    val navigation = _navigation.asStateFlow()
+
+    private var selectedStock: Stock? = null
 
     fun getStocksData(apiType: ApiType){
         _isLoading.update { true }
@@ -58,6 +63,17 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
             )
             _isLoading.update { false }
         }
+    }
+
+    fun onStockCellClicked(stock: Stock){
+        selectedStock = stock
+        _navigation.update {
+            MainFragmentDirections.mainFragmentToStockDetailsFragment()
+        }
+    }
+
+    fun getSelectedStock() : Stock? {
+        return selectedStock
     }
 }
 
