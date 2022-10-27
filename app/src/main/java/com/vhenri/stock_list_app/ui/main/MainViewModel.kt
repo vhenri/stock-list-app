@@ -71,6 +71,10 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
             MainFragmentDirections.mainFragmentToStockDetailsFragment()
         }
     }
+
+    fun getSelectedStock() : Stock? {
+        return selectedStock
+    }
 }
 
 data class MainUiState(
