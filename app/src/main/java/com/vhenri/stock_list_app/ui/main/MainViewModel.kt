@@ -3,6 +3,9 @@ package com.vhenri.stock_list_app.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.mapEither
+import com.squareup.anvil.annotations.ContributesMultibinding
+import com.vhenri.stock_list_app.di.ViewModelKey
+import com.vhenri.stock_list_app.di.components.AppComponent
 import com.vhenri.stock_list_app.models.Stock
 import com.vhenri.stock_list_app.models.getUserExceptionMsg
 import com.vhenri.stock_list_app.repo.ApiType
@@ -13,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@[ContributesMultibinding(AppComponent::class, ViewModel::class) ViewModelKey(MainViewModel::class)]
 class MainViewModel @Inject constructor(private val stockDataRepository: StockDataRepository) : ViewModel() {
     private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(null, null,null))
     val uiState = _uiState.asStateFlow()

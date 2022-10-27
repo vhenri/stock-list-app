@@ -1,33 +1,34 @@
 package com.vhenri.stock_list_app.ui.main
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.squareup.anvil.annotations.ContributesMultibinding
 import com.vhenri.stock_list_app.R
 import com.vhenri.stock_list_app.databinding.FragmentMainBinding
+import com.vhenri.stock_list_app.di.FragmentKey
+import com.vhenri.stock_list_app.di.ViewModelFactory
+import com.vhenri.stock_list_app.di.components.AppComponent
 import com.vhenri.stock_list_app.models.Stock
 import com.vhenri.stock_list_app.repo.ApiType
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainFragment : Fragment() {
+@[ContributesMultibinding(AppComponent::class, Fragment::class) FragmentKey(MainFragment::class)]
+class MainFragment @Inject constructor(
+    viewModelFactory: ViewModelFactory
+) : Fragment(R.layout.fragment_main) {
 
     lateinit var binding: FragmentMainBinding
-    @Inject
-    lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels { viewModelFactory }
     private val adapter = StocksListAdapter()
-
-    override fun onAttach(context: Context) {
-        viewModel = (requireActivity() as MainActivity).viewModel
-        super.onAttach(context)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
