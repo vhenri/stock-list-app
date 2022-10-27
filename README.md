@@ -31,7 +31,7 @@ The app uses state flows to notify Fragment listeners of updates from the ViewMo
 - it always has a value which can be safely read at any time via value property
 - it has a clear separation into a read-only StateFlow interface and a MutableStateFlow.
 
-Screens have 2 state flows: uiState and isLoading. UiState contains all the data required for the screen's main functionality (list of stocks, error data) and isLoading is a UI "side effect" that doesn't impact the overall application state.
+Screens have 3 state flows: uiState, isLoading and navigation. UiState contains all the data required for the screen's main functionality (list of stocks, error data) and isLoading is a UI "side effect" that doesn't impact the overall application state. Navigation is self-explainatory; it handles Navigation Directions! Eventually I'd like to move the isLoading and navigation into a BaseViewModel & BaseFragment - that's on the TODO() list 😛
 
 ### Networking 
 Retrofit + OkHttp is used to grab data from the APIs, and Moshi parses the data for us. API responses are converted into a **result monad** at the ApiClient layer (using kotlin-result). This is done to allow us to easily handle errors only when we actually need the data value. In this app, that's the ViewModel. The app does also have custom exceptions (see `StockApiException`) to provide more granularity around errors, and can be extended as needed.
@@ -89,6 +89,9 @@ Anyways, the dependencies in this app are what I feel is the some-what minimum n
 ## Demo
 
 https://user-images.githubusercontent.com/12767035/196528924-a0979f1c-3406-4b88-aaf6-1e81d5483e46.mov
+
+## TODO()
+- [ ] Create BaseFragment & BaseViewModel for reusability
 
 
 
