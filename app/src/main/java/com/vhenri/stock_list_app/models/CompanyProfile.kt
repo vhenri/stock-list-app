@@ -9,7 +9,7 @@ data class CompanyProfile(
     val exchange: String,
     @Json(name = "ipo") val ipoDate: String,
     @Json(name = "phone") val phoneNumber: String,
-    val webUrl: String,
+    val weburl: String,
     @Json(name = "logo") val logoUrl: String,
     val finnhubIndustry: String
 )

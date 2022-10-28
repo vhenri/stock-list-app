@@ -12,7 +12,7 @@ import javax.inject.Inject
 interface FinnhubApi {
     @GET
     suspend fun getCompanyProfileBySymbol(
-        @Url url: String,
+        @Url url: String = "${FinnhubApiClient.BASE_FINNHUB_URL}/stock/profile2",
         @Query("symbol") symbol: String,
         @Query("token") token: String
     ) : Response<CompanyProfile>
@@ -31,7 +31,6 @@ class FinnhubApiClient @Inject constructor(
     suspend fun getCompanyProfileBySymbol(symbol: String): Result<CompanyProfile?, StockApiException> {
         return execute {
             api.getCompanyProfileBySymbol(
-                url = "$BASE_FINNHUB_URL/stock/profile2",
                 symbol = symbol,
                 token = FINNHUB_API_KEY
             )

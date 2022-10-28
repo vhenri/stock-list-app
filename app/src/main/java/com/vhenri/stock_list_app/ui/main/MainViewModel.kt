@@ -110,6 +110,16 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
             }
         }
     }
+
+    /*
+     * Note - this is the consequences of using one VM for both fragments.
+     * If we don't clear this, it sends us back to the details fragment and back seems to not be working
+     * Could add this to a baseVM (and call it from onCreate by a baseFragment) or other options
+     * more info here: https://developer.android.com/guide/fragments/communicate
+     */
+    fun clearNavigationState(){
+        _navigation.update { null }
+    }
 }
 
 sealed class UiState {
