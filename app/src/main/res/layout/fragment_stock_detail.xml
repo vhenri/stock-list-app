@@ -6,9 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/company_image"
+        android:layout_marginTop="10dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_launcher_background" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/stock_card"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/company_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="match_parent"
@@ -62,7 +72,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/stock_details"
+        android:id="@+id/company_profile"
         app:layout_constraintTop_toBottomOf="@+id/stock_card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,21 +88,68 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_margin="4dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
-
+            android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/details_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:textStyle="bold"
             android:textSize="20sp"
-            tools:text="Details" />
+            android:text="Company Profile" />
+
+            <TextView
+                android:id="@+id/details_country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_title"
+                android:textSize="18sp"
+                tools:text="Country - Canada " />
+
+            <TextView
+                android:id="@+id/details_exchange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_country"
+                android:textSize="18sp"
+                tools:text="Exchange - NASDAQ " />
+
+            <TextView
+                android:id="@+id/details_ipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_exchange"
+                android:textSize="18sp"
+                tools:text="IPO Date - 10/10/2010 " />
+
+            <TextView
+                android:id="@+id/details_industry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_ipo"
+                android:textSize="18sp"
+                tools:text="Industry - Social Media" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/details_industry"
+                android:text="Visit Company Website"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

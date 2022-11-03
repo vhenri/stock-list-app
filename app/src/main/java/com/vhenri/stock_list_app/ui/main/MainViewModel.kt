@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.github.michaelbull.result.mapEither
+import com.vhenri.stock_list_app.models.CompanyProfile
 import com.vhenri.stock_list_app.models.Stock
 import com.vhenri.stock_list_app.models.getUserExceptionMsg
 import com.vhenri.stock_list_app.repo.ApiType
@@ -15,7 +16,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val stockDataRepository: StockDataRepository) : ViewModel() {
-    private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(null, null,null))
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(
+        UiState.MainUiState(
+            null,
+            null,
+            null
+        )
+    )
     val uiState = _uiState.asStateFlow()
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -34,7 +41,7 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
                     val stocks = stockList?.stocks
                     if (stocks?.isNotEmpty() == true) {
                         _uiState.update {
-                            MainUiState(
+                            UiState.MainUiState(
                                 stocks,
                                 null,
                                 null
@@ -42,7 +49,7 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
                         }
                     } else {
                         _uiState.update {
-                            MainUiState(
+                            UiState.MainUiState(
                                 null,
                                 UiErrorType.EMPTY_LIST,
                                 "🫙 Uh oh, the Stock List is empty!"
@@ -53,7 +60,7 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
                 failure = {
                     val error = "🚨 Oh no, something went wrong! Unable to fetch stock data. \n\n${it.getUserExceptionMsg()}"
                     _uiState.update {
-                        MainUiState(
+                        UiState.MainUiState(
                             null,
                             UiErrorType.DATA_ERROR,
                             error
@@ -75,13 +82,62 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
     fun getSelectedStock() : Stock? {
         return selectedStock
     }
+
+    fun getCompanyProfileBySymbol(){
+        selectedStock?.ticker?.let { ticker ->
+            viewModelScope.launch {
+                stockDataRepository.getCompanyProfileBySymbol(ticker).mapEither(
+                    success = { profile ->
+                        _uiState.update {
+                            UiState.DetailUiState(
+                                profile,
+                                null,
+                                null
+                            )
+                        }
+                    },
+                    failure = {
+                        val error = "Unable to get Company Profile at this time"
+                        _uiState.update {
+                            UiState.DetailUiState(
+                                null,
+                                UiErrorType.DATA_ERROR,
+                                error
+                            )
+                        }
+                    }
+                )
+            }
+        }
+    }
+
+    /*
+     * Note - this is the consequences of using one VM for both fragments.
+     * If we don't clear this, it sends us back to the details fragment and back seems to not be working
+     * Could add this to a baseVM (and call it from onCreate by a baseFragment) or other options
+     * more info here: https://developer.android.com/guide/fragments/communicate
+     */
+    fun clearNavigationState(){
+        _navigation.update { null }
+    }
 }
 
-data class MainUiState(
-    val stockList: List<Stock>?,
-    val errorType: UiErrorType?,
-    val errorString: String?
-)
+sealed class UiState {
+    abstract val errorType: UiErrorType?
+    abstract val errorString: String?
+
+    data class MainUiState(
+        val stockList: List<Stock>?,
+        override val errorType: UiErrorType?,
+        override val errorString: String?
+    ) : UiState()
+
+    data class DetailUiState(
+        val companyProfile: CompanyProfile?,
+        override val errorType: UiErrorType?,
+        override val errorString: String?
+    ) : UiState()
+}
 
 enum class UiErrorType {
     EMPTY_LIST, DATA_ERROR

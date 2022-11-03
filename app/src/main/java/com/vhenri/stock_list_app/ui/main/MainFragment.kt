@@ -52,11 +52,13 @@ class MainFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 launch() {
-                    viewModel.uiState.collect { state ->
-                        if (!state.stockList.isNullOrEmpty()) {
-                            updateList(state.stockList)
-                        } else if (!state.errorString.isNullOrEmpty()){
-                            updateNoListData(state.errorType, state.errorString)
+                    viewModel.uiState.collect {
+                        if (it is UiState.MainUiState){
+                            if (!it.stockList.isNullOrEmpty()) {
+                                updateList(it.stockList)
+                            } else if (!it.errorString.isNullOrEmpty()){
+                                updateNoListData(it.errorType, it.errorString)
+                            }
                         }
                     }
                 }
