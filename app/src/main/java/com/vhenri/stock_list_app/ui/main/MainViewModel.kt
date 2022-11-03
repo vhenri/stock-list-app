@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val stockDataRepository: StockDataRepository) : ViewModel() {
-    private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(null, null,null))
+    private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState(null, null, null,null, null))
     val uiState = _uiState.asStateFlow()
 
 
@@ -32,12 +32,16 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
                             MainUiState(
                                 stocks,
                                 null,
+                                null,
+                                null,
                                 null
                             )
                         }
                     } else {
                         _uiState.update {
                             MainUiState(
+                                null,
+                                null,
                                 null,
                                 UiErrorType.EMPTY_LIST,
                                 "🫙 Uh oh, the Stock List is empty!"
@@ -50,6 +54,8 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
                     _uiState.update {
                         MainUiState(
                             null,
+                            null,
+                            null,
                             UiErrorType.DATA_ERROR,
                             error
                         )
@@ -59,10 +65,33 @@ class MainViewModel @Inject constructor(private val stockDataRepository: StockDa
             _isLoading.update { false }
         }
     }
+
+    fun onSearchTextChanged(text: CharSequence){
+        val stockList = uiState.value.stockList
+        // search for company name & ticker
+
+        val newList = if (text.isNotEmpty()) {
+            stockList?.filter { stock -> stock.name.contains(text) || stock.ticker.contains(text) }
+        } else {
+            stockList
+        }
+        _uiState.update {
+            MainUiState(
+                stockList,
+                newList,
+                filteredText = text.toString(),
+                null,
+                null
+            )
+        }
+
+    }
 }
 
 data class MainUiState(
     val stockList: List<Stock>?,
+    val filteredStockList: List<Stock>?,
+    val filteredText: String?,
     val errorType: UiErrorType?,
     val errorString: String?
 )

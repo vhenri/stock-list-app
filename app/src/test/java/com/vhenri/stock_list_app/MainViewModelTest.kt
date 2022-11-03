@@ -91,4 +91,46 @@ class MainViewModelTest {
         }
     }
 
+    @Test
+    fun `when search text is not empty, filtered text should not be null and filteredStockList should not be null`() = runTest {
+        viewModel.uiState.test{
+            viewModel.getStocksData(PORTFOLIO)
+            awaitItem() // vm init
+            awaitItem()
+            viewModel.onSearchTextChanged("t")
+            val uiState = awaitItem()
+            assertNotNull(uiState.filteredStockList)
+            assertNotNull(uiState.filteredText)
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `when search text is empty, filtered text should be null and filteredStockList be null`() = runTest {
+        viewModel.uiState.test{
+            viewModel.getStocksData(PORTFOLIO)
+            awaitItem() // vm init
+            awaitItem()
+            viewModel.onSearchTextChanged("")
+            val uiState = awaitItem()
+            assertNotNull(uiState.filteredStockList)
+            assertNotNull(uiState.filteredText)
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `when search text is not empty, filtered text should not be null and filteredStockList be empty`() = runTest {
+        viewModel.uiState.test{
+            viewModel.getStocksData(PORTFOLIO)
+            awaitItem() // vm init
+            awaitItem()
+            viewModel.onSearchTextChanged("z")
+            val uiState = awaitItem()
+            assertTrue(uiState.filteredStockList?.isEmpty()!!)
+            assertNotNull(uiState.filteredText)
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
 }

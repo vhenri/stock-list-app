@@ -2,6 +2,8 @@ package com.vhenri.stock_list_app.ui.main
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +53,9 @@ class MainFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 launch() {
                     viewModel.uiState.collect { state ->
-                        if (!state.stockList.isNullOrEmpty()) {
+                        if (!state.filteredStockList.isNullOrEmpty() || state.filteredText != null){
+                            updateList(state.filteredStockList ?: emptyList())
+                        } else if (!state.stockList.isNullOrEmpty()) {
                             updateList(state.stockList)
                         } else if (!state.errorString.isNullOrEmpty()){
                             updateNoListData(state.errorType, state.errorString)
@@ -77,6 +81,20 @@ class MainFragment : Fragment() {
         binding.buttonEmpty.setOnClickListener {
             viewModel.getStocksData(ApiType.EMPTY)
         }
+        binding.innerSearchField.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // do nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+               viewModel.onSearchTextChanged(s!!)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // do nothing
+            }
+
+        })
     }
 
     private fun updateList(list: List<Stock>){
