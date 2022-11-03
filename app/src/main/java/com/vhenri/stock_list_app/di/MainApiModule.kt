@@ -6,8 +6,11 @@ import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.create
 
+
 @Module
-object MainApiModule {
+class MainApiModule() {
+
     @Provides
     fun providesStocksApi(retrofit: Retrofit): StocksApi = retrofit.create()
+
 }
